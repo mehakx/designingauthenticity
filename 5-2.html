@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DECODED - Tech Titans Chapter 5.2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: black;
+            color: #10b981;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Matrix Rain Animation */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100vh;
+            font-size: 14px;
+            color: #10b981;
+            opacity: 0.6;
+            animation: matrixFall linear infinite;
+        }
+
+        @keyframes matrixFall {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+
+        /* Main Content */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #047857;
+            transform: translateY(-2px);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px #10b981;
+            letter-spacing: 2px;
+        }
+
+        .chapter-title {
+            font-size: 2rem;
+            color: #fbbf24;
+            margin-bottom: 2rem;
+        }
+
+        /* Content */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .intro-text {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: #6ee7b7;
+        }
+
+        .question {
+            text-align: center;
+            font-size: 1.3rem;
+            font-style: italic;
+            margin: 2rem 0;
+            color: #fbbf24;
+            padding: 1rem;
+            border-left: 4px solid #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        /* Audio Section */
+        .audio-section {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .audio-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fbbf24;
+        }
+
+        .waveform {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            gap: 4px;
+            margin: 1.5rem 0;
+            height: 60px;
+        }
+
+        .wave-bar {
+            width: 4px;
+            background: #10b981;
+            border-radius: 2px;
+            animation: wave 1.5s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 50px; }
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.125rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn-primary {
+            background: #fbbf24;
+            color: black;
+        }
+
+        .btn-primary:hover {
+            background: #f59e0b;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #059669;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #047857;
+            transform: translateY(-2px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1f2937;
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #10b981;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal h3 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .transcript {
+            color: #6ee7b7;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .chapter-title {
+                font-size: 1.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">← Back to Main</button>
+    
+    <div class="matrix-rain" id="matrixRain"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">DECODED</h1>
+            <h2 class="chapter-title">Tech Titans - Chapter 5.2</h2>
+        </div>
+
+        <div class="content">
+            <p class="intro-text">
+                The tech landscape today is dominated by a handful of titans—OpenAI, Apple, Google, Microsoft, Meta, Amazon etc. who have been influential to tech innovation. Their platforms and ecosystems are so deeply embedded that smaller players struggle to break through.
+            </p>
+            
+            <p class="intro-text">
+                With massive funding, talent monopolies, and control over critical infrastructure- cloud, chips, and algorithms- these companies shape today's technology policy and innovation. What enables these dominant players to win every time?
+            </p>
+
+            <div class="audio-section">
+                <h3 class="audio-title">Listen to Key Excerpts</h3>
+                <div class="waveform">
+                    <div class="wave-bar" style="animation-delay: 0s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.1s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.2s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.3s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.4s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.5s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.6s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.7s;"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="playAudio()">▶ Play Excerpts</button>
+                    <button class="btn btn-secondary" onclick="openModal()">📄 View Full Transcript</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transcript Modal -->
+    <div class="modal" id="transcriptModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <h3>Complete Transcript - Tech Titans</h3>
+            <div class="transcript">
+<strong>Tech Companies and Data Extraction (Binna) [00:00:00]</strong>
+"That is what is saying is a kind of company who can work the now the tech oriented environment, giving us not a kind of lose those, that is kind of biggest part. That's the actually the one that keeping the people engaged, that that is a way they can extract the data, behavior around the behavior, how much time they, you know, to engage certain features or, and all those things they can monetize and that's their data of it, because that is actually lead to the what's the consumer behaviors and then lead to them to actually feeding back to the, their cycle of the profits."
+
+<strong>The Power of a Few Tech Titans (Jonah) [00:00:32]</strong>
+"And if I were to kind of draw a culprit in that, it would be like profit-driven development. Like, if the bottom line is, you know, we're using technology, never in the history of humanity have such a few number of dudes on the West Coast of America had so much power over billions of people's lives. Like, it's phenomenal to think that this dozen or so men are touching the lives of literally people on all corners of the globe on a daily basis. And their goal is to extract their resources so that they can monetize them."
+
+<strong>Meta and VR Data Collection (Jonah) [00:01:17]</strong>
+"Because you know, we're digital media artists, like I'm really into making immersive VR headsets, right? Experiences on VR. But the headsets are owned by Meta and they're taking the data from your eyes and from your body and they're selling it and they're figuring out what you want and what you need so they can target ads. And like, so it's a really fraught relationship with just capital gain."
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix Rain Effect
+        function createMatrixRain() {
+            const container = document.getElementById('matrixRain');
+            const columns = Math.floor(window.innerWidth / 20);
+            
+            for (let i = 0; i < columns; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = (i * 20) + 'px';
+                column.style.animationDuration = (3 + Math.random() * 4) + 's';
+                column.style.animationDelay = Math.random() * 5 + 's';
+                
+                let text = '';
+                for (let j = 0; j < 50; j++) {
+                    text += Math.random() > 0.5 ? '1' : '0';
+                    text += '<br>';
+                }
+                
+                column.innerHTML = text;
+                container.appendChild(column);
+            }
+        }
+
+        // Initialize matrix rain
+        createMatrixRain();
+
+        // Audio and Modal Functions
+        let audioPlayer = null;
+        let isPlaying = false;
+
+        function playAudio() {
+            if (!audioPlayer) {
+                audioPlayer = new Audio('chapter_5_2_excerpts.mp3');
+                audioPlayer.addEventListener('ended', function() {
+                    isPlaying = false;
+                    document.querySelector('.btn-primary').innerHTML = '▶ Play Excerpts';
+                    document.querySelectorAll('.wave-bar').forEach(bar => {
+                        bar.style.animationPlayState = 'paused';
+                    });
+                });
+            }
+
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+                document.querySelector('.btn-primary').innerHTML = '▶ Play Excerpts';
+                document.querySelectorAll('.wave-bar').forEach(bar => {
+                    bar.style.animationPlayState = 'paused';
+                });
+            } else {
+                audioPlayer.play();
+                isPlaying = true;
+                document.querySelector('.btn-primary').innerHTML = '⏸ Pause Excerpts';
+                document.querySelectorAll('.wave-bar').forEach(bar => {
+                    bar.style.animationPlayState = 'running';
+                });
+            }
+        }
+
+        function openModal() {
+            document.getElementById('transcriptModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('transcriptModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('transcriptModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Resize handler for matrix rain
+        window.addEventListener('resize', function() {
+            document.getElementById('matrixRain').innerHTML = '';
+            createMatrixRain();
+        });
+    </script>
+</body>
+</html>
