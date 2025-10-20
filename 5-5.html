@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DECODED - Authentic in Inauthentic Times Chapter 5.5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #10b981;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Matrix Rain Animation */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+
+        .matrix-char {
+            position: absolute;
+            color: #10b981;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #047857;
+            transform: translateY(-2px);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px #10b981;
+            letter-spacing: 2px;
+            color: #fbbf24;
+        }
+
+        .chapter-title {
+            font-size: 1.5rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        /* Content */
+        .content {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid #10b981;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+            color: #d1fae5;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fbbf24;
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        /* Audio Section */
+        .audio-section {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .audio-title {
+            font-size: 1.5rem;
+            color: #fbbf24;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px #fbbf24;
+        }
+
+        /* Waveform Animation */
+        .waveform {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            height: 60px;
+            margin: 1.5rem 0;
+            gap: 3px;
+        }
+
+        .wave-bar {
+            width: 4px;
+            background: linear-gradient(to top, #10b981, #fbbf24);
+            border-radius: 2px;
+            animation: wave 1.5s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 40px; }
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fbbf24;
+            border: 2px solid #fbbf24;
+        }
+
+        .btn-secondary:hover {
+            background: #fbbf24;
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #000;
+            margin: 5% auto;
+            padding: 2rem;
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fbbf24;
+            font-size: 24px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+
+        .modal-close:hover {
+            color: #f59e0b;
+        }
+
+        .modal h3 {
+            color: #fbbf24;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .transcript {
+            color: #d1fae5;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .transcript strong {
+            color: #fbbf24;
+            display: block;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .chapter-title {
+                font-size: 1.2rem;
+            }
+
+            .intro-text {
+                font-size: 1rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">← Back</button>
+    
+    <div class="matrix-rain" id="matrixRain"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">DECODED</h1>
+            <h2 class="chapter-title">Authentic in Inauthentic Times - Chapter 5.5</h2>
+        </div>
+
+        <div class="content">
+            <p class="intro-text">
+                In an era where everything feels performative and curated, where social media rewards the most polished versions of ourselves, and where algorithms amplify what gets engagement over what feels genuine—how do we remain authentic? We live in times that seem to systematically reward inauthenticity, where being real can feel like a competitive disadvantage.
+            </p>
+            
+            <p class="intro-text">
+                The challenge isn't just external pressure to perform, but internal confusion about what authenticity even means. When our desires are culturally conditioned, when we've adapted to "baseline normals" that feel wrong, when we can't articulate what's missing—how do we find that deep thing in us that feels truly ours? Authenticity in inauthentic times requires stripping back the layers of what we think we should want to discover what we actually need.
+            </p>
+            
+            <div class="question">
+                What would it look like to live authentically in a world designed to make us perform?
+            </div>
+
+            <div class="audio-section">
+                <h3 class="audio-title">Listen to Key Excerpts</h3>
+                <div class="waveform">
+                    <div class="wave-bar" style="animation-delay: 0s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.1s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.2s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.3s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.4s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.5s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.6s;"></div>
+                    <div class="wave-bar" style="animation-delay: 0.7s;"></div>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="playAudio()">▶ Play Excerpts</button>
+                    <button class="btn btn-secondary" onclick="openModal()">📄 View Full Transcript</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="chapterAudio" preload="metadata">
+        <source src="chapter_5_5_excerpts.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Modal -->
+    <div id="transcriptModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <h3>Complete Transcript - Authentic in Inauthentic Times</h3>
+            <div class="transcript">
+<strong>Finding What Feels Truly Yours (Jonah) [00:00:00]</strong>
+"There's things you know are gonna please your professors. There's things you know they're gonna please your friends. And like, but maybe there was something else that made you. Yeah, or there was something in you that needed to be said that made you sign up to do this program. And like, if you forget that, I think you've done yourself a disservice. So you have to go back and remember like, what was that thing that I had that felt like it was only mine? Because I do think we will have a thing in us that is like really deep in us. And maybe it's something that needs to be worked out. Maybe it's something that needs to be shared. But like, it's really deep. And that's what's driving us to do this."
+
+<strong>Being Genuine vs. Performative (Jonah) [00:00:35]</strong>
+"And how do we find out if we're being genuine to who we are and what we want? And I think nowadays a lot of people don't actually, like they don't know what it means to be genuine to themselves. Because it's become so normal to just kind of take on the state of society around us."
+
+<strong>What's Missing in Our Adapted Life (Jonah) [00:01:05]</strong>
+"But I think things creep in that are lacking, and it's hard to, when you've adapted to something, it's hard to articulate what is missing. You don't know that you need like community, nature, whatever it is that you actually need, like a better diet or something, I don't know what. And like, you just feel like something's like a little bit wrong."
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix Rain Effect
+        function createMatrixRain() {
+            const matrixRain = document.getElementById('matrixRain');
+            const chars = '01';
+            
+            for (let i = 0; i < 50; i++) {
+                const char = document.createElement('div');
+                char.className = 'matrix-char';
+                char.textContent = chars[Math.floor(Math.random() * chars.length)];
+                char.style.left = Math.random() * 100 + '%';
+                char.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                char.style.animationDelay = Math.random() * 2 + 's';
+                matrixRain.appendChild(char);
+            }
+        }
+
+        // Audio Controls
+        let isPlaying = false;
+        const audio = document.getElementById('chapterAudio');
+
+        function playAudio() {
+            const button = document.querySelector('.btn-primary');
+            
+            if (!isPlaying) {
+                audio.play();
+                button.textContent = '⏸ Pause Excerpts';
+                isPlaying = true;
+                
+                // Animate waveform
+                document.querySelectorAll('.wave-bar').forEach(bar => {
+                    bar.style.animationPlayState = 'running';
+                });
+            } else {
+                audio.pause();
+                button.textContent = '▶ Play Excerpts';
+                isPlaying = false;
+                
+                // Stop waveform animation
+                document.querySelectorAll('.wave-bar').forEach(bar => {
+                    bar.style.animationPlayState = 'paused';
+                });
+            }
+        }
+
+        // Audio event listeners
+        audio.addEventListener('ended', function() {
+            const button = document.querySelector('.btn-primary');
+            button.textContent = '▶ Play Excerpts';
+            isPlaying = false;
+            
+            document.querySelectorAll('.wave-bar').forEach(bar => {
+                bar.style.animationPlayState = 'paused';
+            });
+        });
+
+        // Modal Controls
+        function openModal() {
+            document.getElementById('transcriptModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('transcriptModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('transcriptModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Back button
+        function goBack() {
+            window.history.back();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrixRain();
+            
+            // Pause waveform animation initially
+            document.querySelectorAll('.wave-bar').forEach(bar => {
+                bar.style.animationPlayState = 'paused';
+            });
+        });
+    </script>
+</body>
+</html>
